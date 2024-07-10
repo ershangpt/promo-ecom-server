@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Category } from 'src/categories/entities/category.entity';
 import { Gender } from 'src/gender/entities/gender.entity';
+import { ProductImage } from 'src/product-images/entities/product-image.entity';
 import {
   Column,
   CreateDateColumn,
@@ -60,4 +61,7 @@ export class Product {
   @ManyToMany(() => Gender, (gender) => gender.products)
   @JoinTable()
   genders: Gender[];
+
+  @OneToMany(() => ProductImage, (img) => img.product)
+  images: ProductImage[];
 }
