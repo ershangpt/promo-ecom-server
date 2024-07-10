@@ -58,7 +58,12 @@ export class ProductsService {
   }
 
   findOne(id: number) {
-    return this.productRepository.findOneBy({ id });
+    return this.productRepository.find({
+      where: {
+        id,
+      },
+      relations: ['images'],
+    });
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
@@ -67,7 +72,7 @@ export class ProductsService {
   }
 
   async remove(id: number) {
-    const user = await this.findOne(id);
+    const user = await this.productRepository.findOneBy({ id });
     return this.productRepository.remove(user);
   }
 
@@ -91,6 +96,7 @@ export class ProductsService {
     const queryBuilder: SelectQueryBuilder<Product> = this.productRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.categories', 'category')
+      .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.genders', 'gender');
 
     if (baseCategoryArr.length) {
